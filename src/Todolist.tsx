@@ -1,8 +1,10 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-
 import {FilterValueType, TaskType} from './App';
 import AddItemForm from "./AddItem";
 import EditableSpan from "./EditableSpan";
+import {Delete} from "@material-ui/icons";
+import {Button, Checkbox, IconButton} from "@material-ui/core";
+import TL from "./TL.module.css";
 
 type TodolistProps = {
     id:string,
@@ -15,9 +17,14 @@ type TodolistProps = {
     filter:FilterValueType
     removeTodoList:(id:string)=>void,
     changeTaskTitle:(todoListID:string,title: string,id:string)=>void,
+    changeTodolistTitle: (id: string, newTitle: string) => void,
 }
 
 function Todolist(props: TodolistProps) {
+
+    const changeTodolistTitle = (title: string) => {
+        props.changeTodolistTitle(props.id, title);
+    }
 
  const createTaskTitle = (title:string) => {
      props.addTask(title,props.id);
@@ -36,13 +43,13 @@ function Todolist(props: TodolistProps) {
             props.changeTaskTitle(t.id,newTitle,props.id);
       }
 
-        return<li key={t.id}>
-            <input  type="checkbox" checked={t.isDone} onChange={onStatusChangeHandler}/>
+        return<div key={t.id}>
+            <Checkbox color={"primary"}  checked={t.isDone} onChange={onStatusChangeHandler}/>
             <EditableSpan title={t.title} saveTitle={onTitleChangeCallBack}/>
-            {/*<span className={props.filter  !== "completed"&&t.isDone === true? 'is-done':''}>{t.title}</span>*/}
-            <button onClick={() => props.removeTask(t.id,props.id)}>x</button>
+            {/*/!*<span className={props.filter  !== "completed"&&t.isDone === true? 'is-done':''}>{t.title}</span>*!/  делает сделанные таски серыми*/}
+            <IconButton onClick={() => props.removeTask(t.id,props.id)}> <Delete/></IconButton>
 
-        </li>
+        </div>
     })
 
 
@@ -55,13 +62,17 @@ function Todolist(props: TodolistProps) {
 
     return (
         <div>
-            <h3>{props.title} <button onClick={deleteTodolist}>X</button></h3>
+            <div className={TL.container}>
+            <h3><EditableSpan title={props.title} saveTitle={changeTodolistTitle} /></h3>
+            {/*<button onClick={deleteTodolist}>X</button>*/}
+            <IconButton onClick={deleteTodolist}> <Delete/></IconButton>
+            </div>
             <AddItemForm addItem = {createTaskTitle}/>
             {NewArrayTasks}
             <div>
-                <button className={props.filter === "all" ? "active-filter":""} onClick={onAllClickHandler}>All</button>
-                <button className={props.filter === "active" ? "active-filter":""} onClick={onActiveClickHandler}>Active</button>
-                <button className={props.filter === "completed" ? "active-filter":""} onClick={onCompletedClickHandler}>Completed</button>
+                <Button color={"primary"} variant = {props.filter === "all" ? 'outlined':"text"} onClick={onAllClickHandler}>All</Button>
+                <Button color={"secondary"} variant = {props.filter === "active" ? 'outlined':"text"} onClick={onActiveClickHandler}>Active</Button>
+                <Button color={"inherit"} variant = {props.filter === "completed" ? 'outlined':"text"} onClick={onCompletedClickHandler}>Completed</Button>
             </div>
         </div>
     );
