@@ -14,7 +14,7 @@ export type TaskType = {
     title: string
 }
 
-type TodolistType = {
+export type TodolistType = {
     id: string,
     title: string,
     filter: FilterValueType,
@@ -109,6 +109,7 @@ function App() {
             // если нашёлся - изменим ему заголовок
             todolist.title = title;
             setTodoLists([...todoLists]);
+
         }
     }
 
