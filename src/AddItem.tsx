@@ -9,7 +9,8 @@ addItem:(title:string)=>void,
 
 }
 
-function AddItemForm(props:AddItemFormType) {
+export const AddItemForm = React.memo((props:AddItemFormType)=> {
+    console.log('AddItemFormRead')
     let [error, setError] = useState<string|null>(null);
     let [title, setTitle] = useState<string>('');
 
@@ -23,7 +24,11 @@ function AddItemForm(props:AddItemFormType) {
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => { setTitle(e.currentTarget.value);setError(null)}
 
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {setError(null); if (e.charCode == 13)  {addItemClick(title)}}
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if(error !== null){
+            setError(null)};
+        if (e.charCode == 13)  {
+            addItemClick(title)}}
   return (
 
       <div>
@@ -41,5 +46,5 @@ function AddItemForm(props:AddItemFormType) {
     {/*/!*    {error && <div className={"error_message"}>{error}</div>}*!/     //вычисляемый класс если в стейте error значение строка а не null*/}
     </div>)
 
-}
+});
 export default AddItemForm;
